@@ -1,10 +1,13 @@
 /*
-function draw() external returns (bytes32);
+  function draw() external returns (bytes32);
   function enter() external payable returns (bytes32);
   function startNewRound() external returns (bool);
 */
+import { ethers } from "ethers";
+
 import { Container, Row, Col } from 'react-bootstrap';
 import FancyButton from './FancyButton';
+
 import './Dashboard.css';
 
 function Dashboard() {
@@ -12,7 +15,7 @@ function Dashboard() {
     <Container>
       <div className="dash-container">
         <Row className="justify-content-center">
-          <p>Lotto</p>
+          <p>FLotto</p>
         </Row>
         <Row>
           <Col>
@@ -22,11 +25,11 @@ function Dashboard() {
           <Col>
             {/* Display winning all addresses */}
             <FancyButton text={"Draw"}/>
-            <div><p>Text</p></div>
+            {/*<div><p>Text</p></div>*/}
           </Col>
           <Col>
             {/* Disable until winner is drawn */}
-            <FancyButton text={"Start"} disabled={true}/>
+            <FancyButton text={"Get Paid"} disabled={true}/>
           </Col>
         </Row>
       </div>

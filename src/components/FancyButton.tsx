@@ -1,13 +1,14 @@
 import Button from 'react-bootstrap/Button';
 
 interface ButtonProps {
-  text: string;
+  text?: string;
   disabled?: boolean;
+  onButtonClick?: ()=>{};
 }
 
 const FancyButton = ({...props}:ButtonProps) => {
   return (
-    <Button variant="primary" disabled={props.disabled}>
+    <Button variant="primary" disabled={props.disabled} onClick={props.onButtonClick}>
       {props.text}
     </Button>
   );
