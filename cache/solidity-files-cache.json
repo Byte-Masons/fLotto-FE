@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/coop/Projects/Work/fLotto-FE/contracts/ERC20Lotto.sol": {
-      "lastModificationDate": 1616713800307,
-      "contentHash": "fc917f559d765074bf844844aeef4937",
+      "lastModificationDate": 1617157640499,
+      "contentHash": "ee97a209b8f6b68313ed623b3855e798",
       "sourceName": "contracts/ERC20Lotto.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -36,7 +36,7 @@
       ],
       "artifacts": [
         "FantomERC20Lottery",
-        "ILottery"
+        "IERC20Lottery"
       ]
     },
     "/home/coop/Projects/Work/fLotto-FE/contracts/ReentrancyGuard.sol": {
@@ -221,8 +221,8 @@
       ]
     },
     "/home/coop/Projects/Work/fLotto-FE/contracts/Lotto.sol": {
-      "lastModificationDate": 1616713800307,
-      "contentHash": "0f67f81528620e690a1b8fff77eb8693",
+      "lastModificationDate": 1617157459623,
+      "contentHash": "4cecb82f8c110215de1ecee4aa26bde1",
       "sourceName": "contracts/Lotto.sol",
       "solcConfig": {
         "version": "0.8.0",

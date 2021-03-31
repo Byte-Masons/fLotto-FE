@@ -5,7 +5,7 @@ import './App.css';
 import Dashboard from './components/Dashboard';
 import ConnectWallet from './components/ConnectWallet';
 
-import LottoArtifact from "./contracts/Lotto/FantomLottery.json";
+import LottoArtifact from "./artifacts/contracts/Lotto.sol/FantomLottery.json";
 
 interface Props {}
 interface State {
@@ -175,8 +175,7 @@ class App extends React.Component <Props, State> {
     try {
       this._dismissTransactionError();
 
-      const ticketPrice = ethers.utils.parseEther("1");
-      const tx = await this._lotto.enter({ value: ticketPrice });
+      const tx = await this._lotto.enter({ value: ethers.utils.parseEther("1") });
       this.setState({ txBeingSent: tx.hash });
 
       const receipt = await tx.wait();
@@ -201,7 +200,7 @@ class App extends React.Component <Props, State> {
 
     try {
       this._dismissTransactionError();
-          this._viewWinnings();
+      //this._viewWinnings();
 
       const tx = await this._lotto.draw();
       this.setState({ txBeingSent: tx.hash });

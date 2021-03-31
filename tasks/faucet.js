@@ -16,11 +16,13 @@ task("faucet", "Sends ETH to an address")
 
     const [sender] = await ethers.getSigners();
 
-    const tx = await sender.sendTransaction({
-      to: receiver,
-      value: ethers.constants.WeiPerEther,
-    });
-    await tx.wait();
+    for (i = 0; i<100; i++){
+      let tx = await sender.sendTransaction({
+        to: receiver,
+        value: ethers.constants.WeiPerEther,
+      });
+      await tx.wait();
+    }
 
-    console.log(`Transferred 1 ETH to ${receiver}`);
+    console.log(`Transferred 100 ETH to ${receiver}`);
   });

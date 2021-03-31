@@ -4,10 +4,10 @@
 async function main() {
 
   let drawFrequency = 1;
-  let ticketPrice = 1;
+  let ticketPrice = ethers.utils.parseEther("1");
   let name = "JB's Lottery";
-  let recipient = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
-  let modulus = 1;
+  let recipient = '0x5088FeD7b844FBf4c7B6689AA7cf8A5E5Ce348ff';
+  let modulus = 10;
 
   // This is just a convenience check
   if (network.name === "hardhat") {
@@ -54,7 +54,7 @@ function saveFrontendFiles(lotto) {
   const LottoArtifact = artifacts.readArtifactSync("FantomLottery");
 
   fs.writeFileSync(
-    contractsDir + "/Lotto/FantomLottery.json",
+    __dirname + "/../src/artifacts/contracts/Lotto.sol/FantomLottery.json",
     JSON.stringify(LottoArtifact, null, 2)
   );
 }

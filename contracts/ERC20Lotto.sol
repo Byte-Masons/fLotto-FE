@@ -13,7 +13,7 @@ struct Lottery {
   bool finished;
 }
 
-interface ILottery {
+interface IERC20Lottery {
   function draw() external returns (bytes32);
   function enter() external returns (bytes32);
   function getPaid() external returns (bool);
@@ -27,7 +27,7 @@ interface ILottery {
   function viewOdds() external view returns (uint);
 }
 
-contract FantomERC20Lottery is ILottery, ReentrancyGuard {
+contract FantomERC20Lottery is IERC20Lottery, ReentrancyGuard {
 
   string public name;
   address public feeRecipient;
