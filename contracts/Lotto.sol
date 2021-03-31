@@ -241,7 +241,7 @@ contract FantomLottery is ILottery, ReentrancyGuard {
     return (_timestamp() - lottos[currentLotto].lastDraw >= drawFrequency);
   }
 
-  function viewWinnings() external view override returns (uint) {
+  function viewWinnings() public view override returns (uint) {
     return debtToUser[_sender()];
   }
 

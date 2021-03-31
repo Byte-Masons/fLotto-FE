@@ -4,7 +4,7 @@
 async function main() {
 
   let drawFrequency = 1;
-  let ticketPrice = ethers.utils.parseEther("1");
+  //let ticketPrice = ethers.utils.parseEther("1");
   let name = "JB's Lottery";
   let recipient = '0x5088FeD7b844FBf4c7B6689AA7cf8A5E5Ce348ff';
   let modulus = 10;
@@ -28,7 +28,7 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const Lotto = await ethers.getContractFactory("FantomLottery");
-  const lottery = await Lotto.deploy(drawFrequency, ticketPrice, name, recipient, modulus);
+  const lottery = await Lotto.deploy(drawFrequency, ethers.utils.parseEther("1"), name, recipient, modulus);
 
   await lottery.deployed();
 

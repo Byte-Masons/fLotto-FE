@@ -5,7 +5,7 @@ import './App.css';
 import Dashboard from './components/Dashboard';
 import ConnectWallet from './components/ConnectWallet';
 
-import LottoArtifact from "./artifacts/contracts/Lotto.sol/FantomLottery.json";
+import LottoArtifact from "./artifacts/contracts/Lotto.sol/ILottery.json";
 
 interface Props {}
 interface State {
@@ -27,7 +27,7 @@ interface App {
 const HARDHAT_NETWORK_ID = '31337';
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
 
-const contractAddress = {'Lotto':'0x5FbDB2315678afecb367f032d93F642f64180aa3'};
+const contractAddress = {'Lotto':'0xe8D2A1E88c91DCd5433208d4152Cc4F399a7e91d'};
 
 declare const window: any;
 
@@ -67,7 +67,7 @@ class App extends React.Component <Props, State> {
 
     return (
       <div className="App app-background">
-          <Dashboard 
+          <Dashboard
             enterFunction={this._enter}
             drawFunction={this._draw}
             getPaidFunction={this._getPaid}
@@ -128,10 +128,10 @@ class App extends React.Component <Props, State> {
       if (newAddress === undefined) {
         return this._resetState();
       }
-      
+
       this._initialize(newAddress);
     });
-    
+
     window.ethereum.on("networkChanged", ([networkId]:any[]) => {
       //this._stopPollingData();
       this._resetState();
@@ -163,7 +163,7 @@ class App extends React.Component <Props, State> {
       return true;
     }
 
-    this.setState({ 
+    this.setState({
       networkError: 'Please connect Metamask to Localhost:8545'
     });
 

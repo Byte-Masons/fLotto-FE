@@ -10,8 +10,6 @@ module.exports = {
   paths: {
     sources: "./contracts",
     tests: "./test",
-    artifacts: "./artifacts"
+    artifacts: "./src/artifacts"
   },
 };
-
-
