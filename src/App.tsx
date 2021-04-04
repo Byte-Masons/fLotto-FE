@@ -2,10 +2,12 @@ import {ethers} from 'ethers';
 import React from 'react';
 import './App.css';
 
+import { Container, Row, Col } from 'react-bootstrap';
+
 import Dashboard from './components/Dashboard';
 import ConnectWallet from './components/ConnectWallet';
 
-import LottoArtifact from "./artifacts/contracts/Lotto.sol/ILottery.json";
+import LottoArtifact from "./artifacts/contracts/FantomLottery.sol/FantomLottery.json";
 
 interface Props {}
 interface State {
@@ -15,6 +17,7 @@ interface State {
   txBeingSent: any,
   transactionError: any,
   networkError: any,
+  walletConnected: boolean,
 }
 interface App {
   initialState: any,
@@ -27,7 +30,7 @@ interface App {
 const HARDHAT_NETWORK_ID = '31337';
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
 
-const contractAddress = {'Lotto':'0xe8D2A1E88c91DCd5433208d4152Cc4F399a7e91d'};
+const contractAddress = {'Lotto':'0x18E317A7D70d8fBf8e6E893616b52390EbBdb629'};
 
 declare const window: any;
 
@@ -36,18 +39,14 @@ class App extends React.Component <Props, State> {
   constructor(props: Props) {
     super(props);
 
-    // We store multiple things in Dapp's state.
-    // You don't need to follow this pattern, but it's an useful example.
     this.initialState = {
-      // The info of the token (i.e. It's Name and symbol)
       lottoData: undefined,
-      // The user's address and balance
       selectedAddress: undefined,
       balance: undefined,
-      // The ID about transactions being sent, and any possible error with them
       txBeingSent: undefined,
       transactionError: undefined,
       networkError: undefined,
+      walletConnected: false,
     };
 
     this.state = this.initialState;
@@ -66,17 +65,27 @@ class App extends React.Component <Props, State> {
     }
 
     return (
-      <div className="App app-background">
-          <Dashboard
-            enterFunction={this._enter}
-            drawFunction={this._draw}
-            getPaidFunction={this._getPaid}
-            viewWinningsFunction={this._viewWinnings}
-            userBalance={this._balance}
-          />
-          <div className="pt-4">
-            <ConnectWallet connectWallet={this._connectWallet}/>
-          </div>
+     <div className="App app-background">
+        <Container className="app-header">
+          <Row className="pt-4">
+            <Col>
+              <h1 className="app-title">
+                FLotto
+              </h1>
+            </Col>
+            <Col className="text-right">
+              <ConnectWallet connectWallet={this._connectWallet} walletConnected={this.state.walletConnected}/>
+            </Col>
+          </Row>
+        </Container>
+        <Dashboard
+          walletConnected={this.state.walletConnected}
+          enterFunction={this._enter}
+          drawFunction={this._draw}
+          getPaidFunction={this._getPaid}
+          viewWinningsFunction={this._viewWinnings}
+          userBalance={this._balance}
+        />
       </div>
     );
   }
@@ -101,8 +110,8 @@ class App extends React.Component <Props, State> {
   }
 
   async _getLottoData() {
-    const name = "Name";//await this._lotto.viewOdds();
-    const symbol = "Poop";//await this._lotto.readyToDraw();
+    const name = "Name";
+    const symbol = "Poop";
 
     this.setState({ lottoData: { name, symbol } });
   }
@@ -122,7 +131,8 @@ class App extends React.Component <Props, State> {
     }
 
     this._initialize(selectedAddress);
-
+    this.setState({walletConnected: true});
+    this._viewWinnings();
     window.ethereum.on("accountsChanged", ([newAddress]:any[]) => {
       //this._stopPollingData();
       if (newAddress === undefined) {
@@ -184,7 +194,6 @@ class App extends React.Component <Props, State> {
         throw new Error("Transaction failed");
       }
 
-      //await this._updateEntries();
     } catch (error) {
       if (error.code === ERROR_CODE_TX_REJECTED_BY_USER) {
         return;
@@ -200,10 +209,10 @@ class App extends React.Component <Props, State> {
 
     try {
       this._dismissTransactionError();
-      //this._viewWinnings();
-
+      
       const tx = await this._lotto.draw();
       this.setState({ txBeingSent: tx.hash });
+      this._viewWinnings();
 
       const receipt = await tx.wait();
 
@@ -211,7 +220,6 @@ class App extends React.Component <Props, State> {
         throw new Error("Transaction failed");
       }
 
-      //await this._updateEntries();
     } catch (error) {
       if (error.code === ERROR_CODE_TX_REJECTED_BY_USER) {
         return;
@@ -237,7 +245,6 @@ class App extends React.Component <Props, State> {
         throw new Error("Transaction failed");
       }
 
-      //await this._updateEntries();
     } catch (error) {
       if (error.code === ERROR_CODE_TX_REJECTED_BY_USER) {
         return;
@@ -255,7 +262,6 @@ class App extends React.Component <Props, State> {
       const balance = await this._lotto.viewWinnings();
       this._balance = ethers.utils.formatEther(balance);
       this.setState({ balance });
-      console.log(balance);
     } catch (error) {
       if (error.code === ERROR_CODE_TX_REJECTED_BY_USER) {
         return;

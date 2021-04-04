@@ -1,10 +1,10 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/home/coop/Projects/Work/fLotto-FE/contracts/ERC20Lotto.sol": {
-      "lastModificationDate": 1617157640499,
-      "contentHash": "ee97a209b8f6b68313ed623b3855e798",
-      "sourceName": "contracts/ERC20Lotto.sol",
+    "/home/coop/Projects/Work/fLotto-FE/contracts/Base/ERC20.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "98dc579dc86d55a7a78bdc2fba746051",
+      "sourceName": "contracts/Base/ERC20.sol",
       "solcConfig": {
         "version": "0.8.0",
         "settings": {
@@ -28,55 +28,20 @@
         }
       },
       "imports": [
-        "./ReentrancyGuard.sol",
-        "./IERC20.sol"
+        "../Interfaces/IERC20.sol",
+        "../Utils/UtilityPackage.sol"
       ],
-      "versionPragmas": [
-        "0.8.0"
-      ],
-      "artifacts": [
-        "FantomERC20Lottery",
-        "IERC20Lottery"
-      ]
-    },
-    "/home/coop/Projects/Work/fLotto-FE/contracts/ReentrancyGuard.sol": {
-      "lastModificationDate": 1616713800307,
-      "contentHash": "1d45ab4bd9b10c657bd26a957be5bcd9",
-      "sourceName": "contracts/ReentrancyGuard.sol",
-      "solcConfig": {
-        "version": "0.8.0",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "ReentrancyGuard"
+        "ERC20"
       ]
     },
-    "/home/coop/Projects/Work/fLotto-FE/contracts/IERC20.sol": {
-      "lastModificationDate": 1616713800307,
-      "contentHash": "93e6400b1627a496ca5831a1e44a4247",
-      "sourceName": "contracts/IERC20.sol",
+    "/home/coop/Projects/Work/fLotto-FE/contracts/Interfaces/IERC20.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "946ceacfbd2b564725dad5732c37fa73",
+      "sourceName": "contracts/Interfaces/IERC20.sol",
       "solcConfig": {
         "version": "0.8.0",
         "settings": {
@@ -107,10 +72,10 @@
         "IERC20"
       ]
     },
-    "/home/coop/Projects/Work/fLotto-FE/contracts/TestHelpers/ERC20LottoHelpers.sol": {
-      "lastModificationDate": 1616713800307,
-      "contentHash": "0dbb92d543592c923d66f542553872f4",
-      "sourceName": "contracts/TestHelpers/ERC20LottoHelpers.sol",
+    "/home/coop/Projects/Work/fLotto-FE/contracts/Utils/UtilityPackage.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "5952f2815225f6aaa059568bd06caf8f",
+      "sourceName": "contracts/Utils/UtilityPackage.sol",
       "solcConfig": {
         "version": "0.8.0",
         "settings": {
@@ -134,22 +99,19 @@
         }
       },
       "imports": [
-        "../ERC20Lotto.sol",
-        "../IERC20.sol",
-        "./ERC20.sol",
-        "../ReentrancyGuard.sol"
+        "../Interfaces/IERC20.sol"
       ],
       "versionPragmas": [
         "0.8.0"
       ],
       "artifacts": [
-        "ERC20LottoHelper"
+        "UtilityPackage"
       ]
     },
-    "/home/coop/Projects/Work/fLotto-FE/contracts/TestHelpers/ERC20.sol": {
-      "lastModificationDate": 1616713800307,
-      "contentHash": "4e377058ea54a072c747838a88a0d06a",
-      "sourceName": "contracts/TestHelpers/ERC20.sol",
+    "/home/coop/Projects/Work/fLotto-FE/contracts/TestHelpers/TestToken.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "3858ab1b7280e985a73ed88200a7014a",
+      "sourceName": "contracts/TestHelpers/TestToken.sol",
       "solcConfig": {
         "version": "0.8.0",
         "settings": {
@@ -173,19 +135,167 @@
         }
       },
       "imports": [
-        "../IERC20.sol"
+        "../Base/ERC20.sol",
+        "../Interfaces/IERC20.sol"
       ],
+      "versionPragmas": [
+        "0.8.0"
+      ],
+      "artifacts": [
+        "TestToken"
+      ]
+    },
+    "/home/coop/Projects/Work/fLotto-FE/contracts/Utils/Incentivized.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "939b6d25ca07c60fb0a7a9e2244bcd2b",
+      "sourceName": "contracts/Utils/Incentivized.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../Interfaces/IERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.0"
+      ],
+      "artifacts": [
+        "Incentivized"
+      ]
+    },
+    "/home/coop/Projects/Work/fLotto-FE/contracts/TestHelpers/FantomLotteryHelper.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "1b804d54f91ad54944f6c7fd842351cd",
+      "sourceName": "contracts/TestHelpers/FantomLotteryHelper.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../FantomLottery.sol",
+        "../Utils/ReentrancyGuard.sol",
+        "../Interfaces/IERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.0"
+      ],
+      "artifacts": [
+        "FantomLotteryHelper"
+      ]
+    },
+    "/home/coop/Projects/Work/fLotto-FE/contracts/FantomLottery.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "d35c71b35b667e9d3b5882500ab5de53",
+      "sourceName": "contracts/FantomLottery.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Base/LotteryLogic.sol",
+        "./Interfaces/IFantomLottery.sol",
+        "./Interfaces/IERC20.sol",
+        "./Utils/ReentrancyGuard.sol"
+      ],
+      "versionPragmas": [
+        "0.8.0"
+      ],
+      "artifacts": [
+        "FantomLottery"
+      ]
+    },
+    "/home/coop/Projects/Work/fLotto-FE/contracts/Utils/ReentrancyGuard.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "1d45ab4bd9b10c657bd26a957be5bcd9",
+      "sourceName": "contracts/Utils/ReentrancyGuard.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "ERC20"
+        "ReentrancyGuard"
       ]
     },
-    "/home/coop/Projects/Work/fLotto-FE/contracts/TestHelpers/LottoHelpers.sol": {
-      "lastModificationDate": 1616713800307,
-      "contentHash": "311f411225a46a8482a13248078fc8a2",
-      "sourceName": "contracts/TestHelpers/LottoHelpers.sol",
+    "/home/coop/Projects/Work/fLotto-FE/contracts/Base/LotteryLogic.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "02aa69a181554e07a6735adb0731e350",
+      "sourceName": "contracts/Base/LotteryLogic.sol",
       "solcConfig": {
         "version": "0.8.0",
         "settings": {
@@ -209,59 +319,20 @@
         }
       },
       "imports": [
-        "../Lotto.sol",
-        "../ReentrancyGuard.sol",
-        "../IERC20.sol"
+        "../Utils/RevenueStream.sol",
+        "../Utils/UtilityPackage.sol"
       ],
       "versionPragmas": [
         "0.8.0"
       ],
       "artifacts": [
-        "LottoHelper"
+        "BaseLottery"
       ]
     },
-    "/home/coop/Projects/Work/fLotto-FE/contracts/Lotto.sol": {
-      "lastModificationDate": 1617157459623,
-      "contentHash": "4cecb82f8c110215de1ecee4aa26bde1",
-      "sourceName": "contracts/Lotto.sol",
-      "solcConfig": {
-        "version": "0.8.0",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./ReentrancyGuard.sol",
-        "./IERC20.sol"
-      ],
-      "versionPragmas": [
-        "0.8.0"
-      ],
-      "artifacts": [
-        "FantomLottery",
-        "ILottery"
-      ]
-    },
-    "/home/coop/Projects/Work/fLotto-FE/contracts/TestHelpers/dummyERC.sol": {
-      "lastModificationDate": 1616713800307,
-      "contentHash": "a8e53fa74ea7532da2b1358b465e0e4b",
-      "sourceName": "contracts/TestHelpers/dummyERC.sol",
+    "/home/coop/Projects/Work/fLotto-FE/contracts/Interfaces/IFantomLottery.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "c50d88557e3a9fcab06130cca54ec5f3",
+      "sourceName": "contracts/Interfaces/IFantomLottery.sol",
       "solcConfig": {
         "version": "0.8.0",
         "settings": {
@@ -288,6 +359,184 @@
       "versionPragmas": [
         "0.8.0"
       ],
+      "artifacts": [
+        "IFantomLottery"
+      ]
+    },
+    "/home/coop/Projects/Work/fLotto-FE/contracts/Utils/RevenueStream.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "17bf138b709883bb0c34d4f68ac6b76a",
+      "sourceName": "contracts/Utils/RevenueStream.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../Interfaces/IERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.0"
+      ],
+      "artifacts": [
+        "RevenueStream"
+      ]
+    },
+    "/home/coop/Projects/Work/fLotto-FE/contracts/ERC20Lottery.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "e236f1c054387688c7a3c6694f6b28a8",
+      "sourceName": "contracts/ERC20Lottery.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Base/LotteryLogic.sol",
+        "./Interfaces/IERC20Lottery.sol",
+        "./Interfaces/IERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.0"
+      ],
+      "artifacts": [
+        "ERC20Lottery"
+      ]
+    },
+    "/home/coop/Projects/Work/fLotto-FE/contracts/Interfaces/IERC20Lottery.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "1f9dab023b6468df0766b5273407fb0f",
+      "sourceName": "contracts/Interfaces/IERC20Lottery.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.0"
+      ],
+      "artifacts": [
+        "IERC20Lottery"
+      ]
+    },
+    "/home/coop/Projects/Work/fLotto-FE/contracts/TestHelpers/ERC20LotteryHelper.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "43c7b5c6299db131d286b11957103491",
+      "sourceName": "contracts/TestHelpers/ERC20LotteryHelper.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../ERC20Lottery.sol",
+        "../Interfaces/IERC20.sol",
+        "./TestToken.sol"
+      ],
+      "versionPragmas": [
+        "0.8.0"
+      ],
+      "artifacts": [
+        "ERC20LotteryHelper"
+      ]
+    },
+    "/home/coop/Projects/Work/fLotto-FE/contracts/LiquidityLottery.sol": {
+      "lastModificationDate": 1617496329031,
+      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceName": "contracts/LiquidityLottery.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [],
       "artifacts": []
     }
   }

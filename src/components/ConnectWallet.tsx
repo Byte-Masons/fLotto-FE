@@ -1,8 +1,13 @@
 import FancyButton from './FancyButton';
 
-function ConnectWallet(props:any) {
+interface Props {
+	connectWallet: any,
+	walletConnected: boolean,
+}
+
+function ConnectWallet(props:Props) {
   return (
-    <FancyButton text={"Connect Wallet"} onButtonClick={props.connectWallet}/>
+    <FancyButton text={props.walletConnected ? "Wallet Connected" : "Connect Wallet"} onButtonClick={props.connectWallet}/>
   );
 }
 

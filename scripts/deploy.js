@@ -4,10 +4,11 @@
 async function main() {
 
   let drawFrequency = 1;
-  //let ticketPrice = ethers.utils.parseEther("1");
+  let ticketPrice = ethers.utils.parseEther("1");
+  let fee = ethers.utils.parseEther("0.03");
   let name = "JB's Lottery";
   let recipient = '0x5088FeD7b844FBf4c7B6689AA7cf8A5E5Ce348ff';
-  let modulus = 10;
+  let modulus = 2;
 
   // This is just a convenience check
   if (network.name === "hardhat") {
@@ -28,7 +29,7 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const Lotto = await ethers.getContractFactory("FantomLottery");
-  const lottery = await Lotto.deploy(drawFrequency, ethers.utils.parseEther("1"), name, recipient, modulus);
+  const lottery = await Lotto.deploy( name, drawFrequency, ethers.utils.parseEther("1"), modulus, ethers.utils.parseEther("0.03"), recipient);
 
   await lottery.deployed();
 
@@ -54,7 +55,7 @@ function saveFrontendFiles(lotto) {
   const LottoArtifact = artifacts.readArtifactSync("FantomLottery");
 
   fs.writeFileSync(
-    __dirname + "/../src/artifacts/contracts/Lotto.sol/FantomLottery.json",
+    __dirname + "/../src/artifacts/contracts/FantomLottery.sol/FantomLottery.json",
     JSON.stringify(LottoArtifact, null, 2)
   );
 }
