@@ -209,7 +209,7 @@ class App extends React.Component <Props, State> {
 
     try {
       this._dismissTransactionError();
-      
+
       const tx = await this._lotto.draw();
       this.setState({ txBeingSent: tx.hash });
       this._viewWinnings();
@@ -256,21 +256,133 @@ class App extends React.Component <Props, State> {
     }
   }
 
-  async _viewWinnings() {
-
-    try {
-      const balance = await this._lotto.viewWinnings();
-      this._balance = ethers.utils.formatEther(balance);
-      this.setState({ balance });
-    } catch (error) {
-      if (error.code === ERROR_CODE_TX_REJECTED_BY_USER) {
-        return;
+  async _viewName() {
+      const name: string = await this._lotto.getPaid();
+      const receipt = await name.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
       }
-      console.error(error);
-      this.setState({ transactionError: error });
-    } finally {
-      this.setState({ txBeingSent: undefined });
+      // Arbitrary State Handling
+  }
+
+  async _viewDrawFrequency() {
+      const drawFrequency: number = await this._lotto.viewDrawFrequency();
+      const receipt = await drawFrequency.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _viewTicketPrice() {
+      const ticketPrice: number = await this._lotto.viewTicketPrice();
+      const receipt = await ticketPrice.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _viewWinChance() {
+      const winChance: number = await this._lotto.viewWinChance();
+      const receipt = await winChance.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      //`Odds per ticket: 1/${winChance}`
+      // Arbitrary State Handling
+  }
+
+  async _viewCurrentLottery() {
+      const currentLottery: number = await this._lotto.viewCurrentLottery();
+      const receipt = await currentLottery.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _viewTicketHolders(_ticketID: string) {
+      const ticketHolders: string[] = await this._lotto.viewTicketHolders(_ticketID);
+      const receipt = await ticketHolders.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _viewTicketNumber(_ticketID: string) {
+      const ticketNumber: number = await this._lotto.viewTicketNumber(_ticketID);
+      const receipt = await ticketNumber.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _viewStartTime(_lottoNumber: number) {
+      const startTime: number = await this._lotto.viewStartTime(_lottoNumber);
+      const receipt = await startTime.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _viewLastDrawTime(_lottoNumber: number) {
+      const lastDrawTime: number = await this._lotto.viewLastDrawTime(_lottoNumber);
+      const receipt = await lastDrawTime.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _viewTotalPot(_lottoNumber: number) {
+      const totalPot: number = await this._lotto.viewTotalPot(_lottoNumber);
+      const receipt = await totalPot.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _viewWinningTicket(_lottoNumber: number) {
+      const winningTicket: string = await this._lotto.viewWinningTicket(_lottoNumber);
+      const receipt = await winningTicket.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _viewUserTicketList(_lottoNumber: number) {
+      const userTicketList: string[] = await this._lotto.viewUserTicketList(_lottoNumber);
+      const receipt = await userTicketList.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _readyToDraw() {
+      const ready: boolean = await this._lotto.readyToDraw();
+      const receipt = await ready.wait();
+      const receipt = await ticketNumber.wait();
+      if (receipt.status === 0) {
+        throw new Error("no data");
+      }
+      // Arbitrary State Handling
+  }
+
+  async _viewWinnings() {
+    const balance = await this._lotto.viewWinnings();
+    const receipt = await balance.wait();
+    if (receipt.status === 0) {
+      throw new Error("no data");
     }
+    this._balance = ethers.utils.formatEther(balance);
+    this.setState({ balance });
   }
 }
 
