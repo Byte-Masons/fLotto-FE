@@ -257,7 +257,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewName() {
-      const name: string = await this._lotto.getPaid();
+      const name = await this._lotto.getPaid();
       const receipt = await name.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -266,7 +266,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewDrawFrequency() {
-      const drawFrequency: number = await this._lotto.viewDrawFrequency();
+      const drawFrequency = await this._lotto.viewDrawFrequency();
       const receipt = await drawFrequency.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -275,7 +275,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewTicketPrice() {
-      const ticketPrice: number = await this._lotto.viewTicketPrice();
+      const ticketPrice = await this._lotto.viewTicketPrice();
       const receipt = await ticketPrice.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -284,7 +284,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewWinChance() {
-      const winChance: number = await this._lotto.viewWinChance();
+      const winChance = await this._lotto.viewWinChance();
       const receipt = await winChance.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -294,7 +294,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewCurrentLottery() {
-      const currentLottery: number = await this._lotto.viewCurrentLottery();
+      const currentLottery = await this._lotto.viewCurrentLottery();
       const receipt = await currentLottery.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -303,7 +303,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewTicketHolders(_ticketID: string) {
-      const ticketHolders: string[] = await this._lotto.viewTicketHolders(_ticketID);
+      const ticketHolders = await this._lotto.viewTicketHolders(_ticketID);
       const receipt = await ticketHolders.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -312,7 +312,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewTicketNumber(_ticketID: string) {
-      const ticketNumber: number = await this._lotto.viewTicketNumber(_ticketID);
+      const ticketNumber = await this._lotto.viewTicketNumber(_ticketID);
       const receipt = await ticketNumber.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -321,7 +321,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewStartTime(_lottoNumber: number) {
-      const startTime: number = await this._lotto.viewStartTime(_lottoNumber);
+      const startTime = await this._lotto.viewStartTime(_lottoNumber);
       const receipt = await startTime.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -330,7 +330,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewLastDrawTime(_lottoNumber: number) {
-      const lastDrawTime: number = await this._lotto.viewLastDrawTime(_lottoNumber);
+      const lastDrawTime = await this._lotto.viewLastDrawTime(_lottoNumber);
       const receipt = await lastDrawTime.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -339,7 +339,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewTotalPot(_lottoNumber: number) {
-      const totalPot: number = await this._lotto.viewTotalPot(_lottoNumber);
+      const totalPot = await this._lotto.viewTotalPot(_lottoNumber);
       const receipt = await totalPot.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -348,7 +348,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewWinningTicket(_lottoNumber: number) {
-      const winningTicket: string = await this._lotto.viewWinningTicket(_lottoNumber);
+      const winningTicket = await this._lotto.viewWinningTicket(_lottoNumber);
       const receipt = await winningTicket.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -357,7 +357,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewUserTicketList(_lottoNumber: number) {
-      const userTicketList: string[] = await this._lotto.viewUserTicketList(_lottoNumber);
+      const userTicketList = await this._lotto.viewUserTicketList(_lottoNumber);
       const receipt = await userTicketList.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -366,9 +366,8 @@ class App extends React.Component <Props, State> {
   }
 
   async _readyToDraw() {
-      const ready: boolean = await this._lotto.readyToDraw();
+      const ready = await this._lotto.readyToDraw();
       const receipt = await ready.wait();
-      const receipt = await ticketNumber.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
       }
