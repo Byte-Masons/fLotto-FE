@@ -1,39 +1,230 @@
 import {ethers} from 'ethers';
-import React from 'react';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
-
 import Dashboard from './components/Dashboard';
 import ConnectWallet from './components/ConnectWallet';
 
 import LottoArtifact from "./artifacts/contracts/FantomLottery.sol/FantomLottery.json";
 
-interface Props {}
-interface State {
-  lottoData: any,
-  selectedAddress: any,
-  balance: any,
-  txBeingSent: any,
-  transactionError: any,
-  networkError: any,
-  walletConnected: boolean,
-}
-interface App {
-  initialState: any,
-  _pollDataInterval: any,
-  _lotto: any,
-  _provider: any,
-  _balance: any,
-}
+import './App.css';
 
 const HARDHAT_NETWORK_ID = '31337';
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
-
-const contractAddress = {'Lotto':'0x18E317A7D70d8fBf8e6E893616b52390EbBdb629'};
+// replace the Lotto value with the one shown after running the deploy script
+const contractAddress = {'Lotto':'0x276C216D241856199A83bf27b2286659e5b877D3'};
 
 declare const window: any;
 
+let _provider:any = undefined;
+
+function App () {
+  const [selectedAddress, setSelectedAddress] = useState<String|undefined>("");
+  const [balance, setBalance] = useState<String|undefined>(undefined);
+  const [txBeingSent, setTxBeingSent] = useState(undefined);
+  const [transactionError, setTransactionError] = useState(undefined);
+  const [networkError, setNetworkError] = useState<String|undefined>(undefined);
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [_lotto, setLotto] = useState<any>(undefined);
+
+  useEffect(() => {
+    _initializeEthers();
+  }, []);
+
+  // this is to show the winnings after the lotto has been instantiated
+  useEffect(() => {
+    _viewWinnings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_lotto]);
+
+  useEffect(() => {
+    if (selectedAddress === undefined) {
+      setWalletConnected(false);
+      setBalance("");
+    }
+  }, [selectedAddress]);
+
+
+  const _initializeEthers = async () => {
+    _provider = new ethers.providers.Web3Provider(window.ethereum);
+    try {
+      const signer = _provider.getSigner(0);
+      const addr = await signer.getAddress();
+      const lottoInstantiate = new ethers.Contract(
+        contractAddress.Lotto,
+        LottoArtifact.abi,
+        signer
+      );
+
+      setLotto(lottoInstantiate);
+      setWalletConnected(true);
+      setSelectedAddress(addr);
+    } catch (error) {
+      return;
+    }
+  }
+
+  const _checkNetwork = () => {
+    if (window.ethereum.networkVersion === HARDHAT_NETWORK_ID) {
+      return true;
+    }
+
+    setNetworkError('Please connect Metamask to Localhost:8545');
+
+    return false;
+  }
+
+  const _initialize = (userAddress:any) => {
+    setSelectedAddress(userAddress);
+
+    _initializeEthers();
+
+  }
+
+  const _resetState = () => {
+    setSelectedAddress(undefined);
+    setBalance(undefined);
+    setTxBeingSent(undefined);
+    setTransactionError(undefined);
+    setNetworkError(undefined);
+    setWalletConnected(false);
+  }
+
+  const _connectWallet = async () => {
+    const [selectedAddress] = await window.ethereum.request({ method: "eth_requestAccounts" });
+
+    if (!_checkNetwork()) {
+      console.log("Network failure.")
+      return;
+    }
+
+    _initialize(selectedAddress);
+    setWalletConnected(true);
+    window.ethereum.on("accountsChanged", ([newAddress]:any[]) => {
+      if (newAddress === undefined) {
+        return _resetState();
+      }
+      _initialize(newAddress);
+    });
+
+    window.ethereum.on("chainChanged", ([chainId]:any[]) => {
+      _resetState();
+    });
+  }
+
+  const _viewWinnings = async () => {
+    try {
+      const balance = await _lotto.viewWinnings();
+      setBalance(ethers.utils.formatEther(balance));
+    } catch(error) {
+      setBalance("");
+    }
+  }
+
+  const _enter = async () => {
+    try {
+      setTransactionError(undefined);
+      const tx = await _lotto.enter({ value: ethers.utils.parseEther("1") });
+      setTxBeingSent(tx.hash);
+      const receipt = await tx.wait();
+
+      if (receipt.status === 0) {
+        throw new Error("Transaction failed");
+      }
+    } catch (error) {
+      if (error.code === ERROR_CODE_TX_REJECTED_BY_USER) {
+        return;
+      }
+      console.error(error);
+      setTransactionError(error);
+    } finally {
+      setTxBeingSent(undefined);
+    }
+  }
+
+  const _draw = async () => {
+    try {
+      setTransactionError(undefined);
+      const tx = await _lotto.draw();
+      setTxBeingSent(tx.hash);
+      const receipt = await tx.wait();
+
+      if (receipt.status === 0) {
+        throw new Error("Transaction failed");
+      }
+    } catch (error) {
+      if (error.code === ERROR_CODE_TX_REJECTED_BY_USER) {
+        return;
+      }
+      console.error(error);
+      setTransactionError(error);
+    } finally {
+      _viewWinnings();
+      setTxBeingSent(undefined);
+    }
+  }
+
+  const _getPaid = async () => {
+    try {
+      setTransactionError(undefined);
+
+      const tx = await _lotto.getPaid();
+      setTxBeingSent(tx.hash);
+      const receipt = await tx.wait();
+
+      if (receipt.status === 0) {
+        throw new Error("Transaction failed");
+      }
+    } catch (error) {
+      if (error.code === ERROR_CODE_TX_REJECTED_BY_USER) {
+        return;
+      }
+      console.error(error);
+      setTransactionError(error);
+    } finally {
+      _viewWinnings();
+      setTxBeingSent(undefined);
+    }
+  }
+
+
+  if (window.ethereum === undefined) {
+    return <div>No wallet connected.</div>;
+  }
+
+  return (
+   <div className="App app-background">
+      <Container className="app-header">
+        <Row className="pt-4">
+          <Col>
+            <h1 className="app-title">
+              FLotto
+            </h1>
+          </Col>
+          <Col className="text-right">
+            <ConnectWallet 
+              connectWallet={_connectWallet}
+              walletConnected={walletConnected}
+              walletAddress={selectedAddress}
+            />
+          </Col>
+        </Row>
+      </Container>
+      <Dashboard
+        walletConnected={walletConnected}
+        enterFunction={_enter}
+        drawFunction={_draw}
+        getPaidFunction={_getPaid}
+        viewWinningsFunction={_viewWinnings}
+        userBalance={balance}
+      />
+    </div>
+  );
+}
+
+export default App;
+
+/*
 class App extends React.Component <Props, State> {
 
   constructor(props: Props) {
@@ -60,6 +251,7 @@ class App extends React.Component <Props, State> {
   }
 
   render() {
+
     if (window.ethereum === undefined) {
       return <div>No wallet connected.</div>;
     }
@@ -74,7 +266,11 @@ class App extends React.Component <Props, State> {
               </h1>
             </Col>
             <Col className="text-right">
-              <ConnectWallet connectWallet={this._connectWallet} walletConnected={this.state.walletConnected}/>
+              <ConnectWallet 
+                connectWallet={this._connectWallet}
+                walletConnected={this.state.walletConnected}
+                walletAddress={this.state.selectedAddress}
+              />
             </Col>
           </Row>
         </Container>
@@ -95,6 +291,7 @@ class App extends React.Component <Props, State> {
       selectedAddress: userAddress,
     });
 
+
     this._initializeEthers();
     this._getLottoData();
   }
@@ -102,11 +299,15 @@ class App extends React.Component <Props, State> {
   async _initializeEthers() {
     this._provider = new ethers.providers.Web3Provider(window.ethereum);
 
-    this._lotto = new ethers.Contract(
+    const signer = this._provider.getSigner(0);
+    const addr = await signer.getAddress();
+
+    this.lotto = new ethers.Contract(
       contractAddress.Lotto,
       LottoArtifact.abi,
-      this._provider.getSigner(0)
+      signer
     );
+    this.setState({ selectedAddress: addr })
   }
 
   async _getLottoData() {
@@ -119,7 +320,7 @@ class App extends React.Component <Props, State> {
   async _updateEntries() {
 
     console.log(this.state.lottoData);
-    const balance = await this._lotto.viewWinnings();
+    const balance = await this.lotto.viewWinnings();
     this.setState({ balance });
   }
 
@@ -132,7 +333,7 @@ class App extends React.Component <Props, State> {
 
     this._initialize(selectedAddress);
     this.setState({walletConnected: true});
-    this._viewWinnings();
+    //this._viewWinnings();
     window.ethereum.on("accountsChanged", ([newAddress]:any[]) => {
       //this._stopPollingData();
       if (newAddress === undefined) {
@@ -185,7 +386,7 @@ class App extends React.Component <Props, State> {
     try {
       this._dismissTransactionError();
 
-      const tx = await this._lotto.enter({ value: ethers.utils.parseEther("1") });
+      const tx = await this.lotto.enter({ value: ethers.utils.parseEther("1") });
       this.setState({ txBeingSent: tx.hash });
 
       const receipt = await tx.wait();
@@ -210,7 +411,7 @@ class App extends React.Component <Props, State> {
     try {
       this._dismissTransactionError();
 
-      const tx = await this._lotto.draw();
+      const tx = await this.lotto.draw();
       this.setState({ txBeingSent: tx.hash });
       this._viewWinnings();
 
@@ -236,7 +437,7 @@ class App extends React.Component <Props, State> {
     try {
       this._dismissTransactionError();
 
-      const tx = await this._lotto.getPaid();
+      const tx = await this.lotto.getPaid();
       this.setState({ txBeingSent: tx.hash });
 
       const receipt = await tx.wait();
@@ -257,7 +458,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewName() {
-      const name = await this._lotto.getPaid();
+      const name = await this.lotto.getPaid();
       const receipt = await name.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -266,7 +467,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewDrawFrequency() {
-      const drawFrequency = await this._lotto.viewDrawFrequency();
+      const drawFrequency = await this.lotto.viewDrawFrequency();
       const receipt = await drawFrequency.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -275,7 +476,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewTicketPrice() {
-      const ticketPrice = await this._lotto.viewTicketPrice();
+      const ticketPrice = await this.lotto.viewTicketPrice();
       const receipt = await ticketPrice.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -284,7 +485,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewWinChance() {
-      const winChance = await this._lotto.viewWinChance();
+      const winChance = await this.lotto.viewWinChance();
       const receipt = await winChance.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -294,7 +495,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewCurrentLottery() {
-      const currentLottery = await this._lotto.viewCurrentLottery();
+      const currentLottery = await this.lotto.viewCurrentLottery();
       const receipt = await currentLottery.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -303,7 +504,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewTicketHolders(_ticketID: string) {
-      const ticketHolders = await this._lotto.viewTicketHolders(_ticketID);
+      const ticketHolders = await this.lotto.viewTicketHolders(_ticketID);
       const receipt = await ticketHolders.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -312,7 +513,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewTicketNumber(_ticketID: string) {
-      const ticketNumber = await this._lotto.viewTicketNumber(_ticketID);
+      const ticketNumber = await this.lotto.viewTicketNumber(_ticketID);
       const receipt = await ticketNumber.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -320,8 +521,8 @@ class App extends React.Component <Props, State> {
       // Arbitrary State Handling
   }
 
-  async _viewStartTime(_lottoNumber: number) {
-      const startTime = await this._lotto.viewStartTime(_lottoNumber);
+  async _viewStartTime(lottoNumber: number) {
+      const startTime = await this.lotto.viewStartTime(lottoNumber);
       const receipt = await startTime.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -329,8 +530,8 @@ class App extends React.Component <Props, State> {
       // Arbitrary State Handling
   }
 
-  async _viewLastDrawTime(_lottoNumber: number) {
-      const lastDrawTime = await this._lotto.viewLastDrawTime(_lottoNumber);
+  async _viewLastDrawTime(lottoNumber: number) {
+      const lastDrawTime = await this.lotto.viewLastDrawTime(lottoNumber);
       const receipt = await lastDrawTime.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -338,8 +539,8 @@ class App extends React.Component <Props, State> {
       // Arbitrary State Handling
   }
 
-  async _viewTotalPot(_lottoNumber: number) {
-      const totalPot = await this._lotto.viewTotalPot(_lottoNumber);
+  async _viewTotalPot(lottoNumber: number) {
+      const totalPot = await this.lotto.viewTotalPot(lottoNumber);
       const receipt = await totalPot.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -347,8 +548,8 @@ class App extends React.Component <Props, State> {
       // Arbitrary State Handling
   }
 
-  async _viewWinningTicket(_lottoNumber: number) {
-      const winningTicket = await this._lotto.viewWinningTicket(_lottoNumber);
+  async _viewWinningTicket(lottoNumber: number) {
+      const winningTicket = await this.lotto.viewWinningTicket(lottoNumber);
       const receipt = await winningTicket.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -356,8 +557,8 @@ class App extends React.Component <Props, State> {
       // Arbitrary State Handling
   }
 
-  async _viewUserTicketList(_lottoNumber: number) {
-      const userTicketList = await this._lotto.viewUserTicketList(_lottoNumber);
+  async _viewUserTicketList(lottoNumber: number) {
+      const userTicketList = await this.lotto.viewUserTicketList(lottoNumber);
       const receipt = await userTicketList.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -366,7 +567,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _readyToDraw() {
-      const ready = await this._lotto.readyToDraw();
+      const ready = await this.lotto.readyToDraw();
       const receipt = await ready.wait();
       if (receipt.status === 0) {
         throw new Error("no data");
@@ -375,7 +576,7 @@ class App extends React.Component <Props, State> {
   }
 
   async _viewWinnings() {
-    const balance = await this._lotto.viewWinnings();
+    const balance = await this.lotto.viewWinnings();
     const receipt = await balance.wait();
     if (receipt.status === 0) {
       throw new Error("no data");
@@ -384,5 +585,6 @@ class App extends React.Component <Props, State> {
     this.setState({ balance });
   }
 }
-
 export default App;
+
+*/

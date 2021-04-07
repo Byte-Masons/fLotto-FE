@@ -1,9 +1,3 @@
-/*
-  function draw() external returns (bytes32);
-  function enter() external payable returns (bytes32);
-  function startNewRound() external returns (bool);
-*/
-
 import { Container, Row, Col } from 'react-bootstrap';
 import FancyButton from './FancyButton';
 
