@@ -1,7 +1,8 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import FancyButton from './FancyButton';
+import tesseract from '../assets/tesseract.gif';
 
-import './Dashboard.css';
+import '../styling/Dashboard.css';
 
 interface Props {
   walletConnected: boolean,
@@ -27,16 +28,22 @@ function Dashboard(props:Props) {
             {/*<div><p>Text</p></div>*/}
           </Col>
         </Row>
+        {/*}
         <Row>
           <Col>
           {/*
             <div>User Balance: {props.userBalance}</div>
-            */}
+            *
             <FancyButton text={"View Winnings"} onButtonClick={props.viewWinningsFunction}/>
             
           </Col>
         </Row>
-
+        */}
+        <Row>
+          <Col>
+            <img src={tesseract}/>
+          </Col>
+        </Row>
         <Row className="mt-5">
           <Col>
             <div>User Balance: {props.userBalance}</div>

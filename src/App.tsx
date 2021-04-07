@@ -7,12 +7,12 @@ import ConnectWallet from './components/ConnectWallet';
 
 import LottoArtifact from "./artifacts/contracts/FantomLottery.sol/FantomLottery.json";
 
-import './App.css';
+import './styling/App.css';
 
 const HARDHAT_NETWORK_ID = '31337';
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
 // replace the Lotto value with the one shown after running the deploy script
-const contractAddress = {'Lotto':'0x276C216D241856199A83bf27b2286659e5b877D3'};
+const contractAddress = {'Lotto':'0xe8D2A1E88c91DCd5433208d4152Cc4F399a7e91d'};
 
 declare const window: any;
 
@@ -40,7 +40,7 @@ function App () {
   useEffect(() => {
     if (selectedAddress === undefined) {
       setWalletConnected(false);
-      setBalance("");
+      setBalance("0.0");
     }
   }, [selectedAddress]);
 
@@ -55,7 +55,6 @@ function App () {
         LottoArtifact.abi,
         signer
       );
-
       setLotto(lottoInstantiate);
       setWalletConnected(true);
       setSelectedAddress(addr);
@@ -68,17 +67,13 @@ function App () {
     if (window.ethereum.networkVersion === HARDHAT_NETWORK_ID) {
       return true;
     }
-
     setNetworkError('Please connect Metamask to Localhost:8545');
-
     return false;
   }
 
   const _initialize = (userAddress:any) => {
     setSelectedAddress(userAddress);
-
     _initializeEthers();
-
   }
 
   const _resetState = () => {
@@ -94,7 +89,7 @@ function App () {
     const [selectedAddress] = await window.ethereum.request({ method: "eth_requestAccounts" });
 
     if (!_checkNetwork()) {
-      console.log("Network failure.")
+      console.log(networkError);
       return;
     }
 
